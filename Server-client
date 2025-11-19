@@ -1,0 +1,81 @@
+import java.io.*;
+import java.net.*;
+
+public class Server {
+    public static void main(String[] args) {
+        int port = 5000;
+
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+            System.out.println("Server avviato. In attesa di connessioni...");
+
+            Socket socket = serverSocket.accept();
+            System.out.println("Client connesso!");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader tastiera = new BufferedReader(new InputStreamReader(System.in));
+
+            String msgClient, msgServer;
+
+            while (true) {
+          
+                msgClient = in.readLine();
+                if (msgClient == null) break;
+                System.out.println("Client: " + msgClient);
+
+                System.out.print("Server: ");
+                msgServer = tastiera.readLine();
+                out.println(msgServer);
+
+                if (msgServer.equalsIgnoreCase("exit")) break;
+            }
+
+            socket.close();
+            System.out.println("Connessione chiusa.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+
+import java.io.*;
+import java.net.*;
+
+public class Client {
+    public static void main(String[] args) {
+        String host = "localhost";
+        int port = 5000;
+
+        try (Socket socket = new Socket(host, port)) {
+            System.out.println("Connesso al server.");
+
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            BufferedReader tastiera = new BufferedReader(new InputStreamReader(System.in));
+
+            String msgServer, msgClient;
+
+            while (true) {
+                System.out.print("Client: ");
+                msgClient = tastiera.readLine();
+                out.println(msgClient);
+
+                if (msgClient.equalsIgnoreCase("exit")) break;
+
+                msgServer = in.readLine();
+                if (msgServer == null) break;
+
+                System.out.println("Server: " + msgServer);
+            }
+
+            System.out.println("Connessione chiusa.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+§
