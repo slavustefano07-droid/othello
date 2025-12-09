@@ -120,6 +120,37 @@ public class logica {
         System.out.println("\n\n");
     }
 
+      public static boolean mossaSu(int y, int x) {
+
+        if (x <= 0) return false;
+        int i = x - 1;
+
+        if (matrix[i][y] == 0 || matrix[i][y] == turno)
+            return false;
+
+        for (; i >= 0; i--) {
+
+            if (matrix[i][y] == 0) {
+                return false;
+            }
+
+            if (matrix[i][y] == turno) {
+                break;
+            }
+        }
+
+        if (i < 0) return false;
+
+        for (int j = x - 1; j > i; j--) {
+            matrix[j][y] = turno;
+        }
+
+        matrix[x][y] = turno;
+
+        return true;
+    }
+
+
     public static void main(String[] args) {
         int x;
         int y;
